@@ -1,33 +1,28 @@
-.App {
-  text-align: center;
+/*App.css*/
+.game-board {
+	
 }
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+.columns-container {
+	display: grid;
+	grid-gap: 16px;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.column {
+	display: grid;
+	grid-gap: 16px;
 }
-
-.App-link {
-  color: #61dafb;
+.slot {
+	display: block;
+	border-radius: 100%;
+	width: 64px;
+	height: 64px;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.slot.inactive {
+	background-color: #fff;
+	border: 1px dotted black;
+}
+.slot.active.user {
+	background-color: red;
+}
+.slot.active.cpu {
+	background-color: blue;
 }

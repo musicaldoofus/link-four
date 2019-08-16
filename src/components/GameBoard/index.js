@@ -53,10 +53,9 @@ class GameBoard extends Component {
 		const horizontalLine = (role) => {
 			let memo = [];
 			for (let colIndex = 0; colIndex < this.props.factorDepth; colIndex++) {
-				console.log('checking colIndex', colIndex, 'until', this.props.factorDepth);
 				const slotIndices = this.state.columns[colIndex]
-					.map((s, i) => s !== role ? s : i)
-					.filter(s => s !== undefined);
+					.map((s, i) => s === role ? i : null)
+					.filter(s => s !== null);
 				if (colIndex === 0) memo = slotIndices;
 				memo = slotIndices.filter(i => memo.indexOf(i) > -1);
 				if (memo.length === 0) return false;
@@ -67,6 +66,14 @@ class GameBoard extends Component {
 			const isColumnFull = (_, colIndex) => this.state.columns[colIndex].every(slot => slot === role);
 			return this.state.columns.some(isColumnFull);
 		}
+		// const winnerTests = [
+			// diagonal,
+			// invertedDiagonal,
+			// horizontalLine,
+			// verticalLine
+		// ];
+		// console.log('tests for:', this.state.currentUser);
+		// winnerTests.forEach(test => console.log(test(this.state.currentUser)));
 		return diagonal(this.state.currentUser) ||
 			invertedDiagonal(this.state.currentUser) ||
 			horizontalLine(this.state.currentUser) ||
@@ -92,8 +99,10 @@ class GameBoard extends Component {
 	}
 	
 	setCPUMove() {
-		const openColumns = this.state;
-		const cpuSelectedColumn = 0;
+		const openColumns = this.state.columns
+			.map((column, colIndex) => column.some(slot => slot === undefined) ? colIndex : null)
+			.filter(c => c !== null);
+		const cpuSelectedColumn = openColumns[Math.floor(Math.random() * openColumns.length)];
 		this.handleAdvanceTurn(this.getUpdatedColumnList(cpuSelectedColumn));
 	}
 	

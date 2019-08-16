@@ -2,27 +2,16 @@
 .column {
 	display: grid;
 	grid-gap: 16px;
+	z-index: 1;
 }
 .column.closed::before {
 	
 }
 .slot {
+	z-index: 2;
 	display: block;
 	width: 64px;
 	height: 64px;
 	border-radius: 100%;
 	border: 2px solid black;
-}
-/*include animatino from bounce.js as this should only render once*/
-.token {
-	display: block;
-	width: 100%;
-	height: 100%;
-	border-radius: 100%;
-}
-.token.user {
-	background-color: red;	
-}
-.token.cpu {
-	background-color: blue;	
 }

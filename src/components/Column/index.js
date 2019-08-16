@@ -1,9 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
+import Token from '../Token';
 import './Column.css';
-
-const Token = ({user}) => (
-	<div className={`token ${user}`}></div>
-);
 
 const Slot = ({user}) => (
 	<div className="slot">

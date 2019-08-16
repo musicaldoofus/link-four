@@ -52,14 +52,15 @@ class GameBoard extends Component {
 		};
 		const horizontalLine = (role) => {
 			let memo = [];
+			const toRoleIndex = (s, i) => s === role ? i : null;
+			const onlyIndices = (i) => i !== null && memo.indexOf(i) > -1;
 			for (let colIndex = 0; colIndex < this.props.factorDepth; colIndex++) {
-				const slotIndices = this.state.columns[colIndex]
-					.map((s, i) => s === role ? i : null)
-					.filter(s => s !== null);
-				if (colIndex === 0) memo = slotIndices;
-				memo = slotIndices.filter(i => memo.indexOf(i) > -1);
-				if (memo.length === 0) return false;
+				// if (colIndex === 0) memo = slotIndices;
+				memo = this.state.columns[colIndex]
+					.map(toRoleIndex)
+					.filter(onlyIndices);
 			}
+			if (memo.length === 0) return false;
 			return true;
 		}
 		const verticalLine = (role) => {

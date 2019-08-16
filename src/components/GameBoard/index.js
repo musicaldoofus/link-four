@@ -1,117 +1,104 @@
 import React, { Component } from 'react';
 import Column from '../Column';
-import TURN_STATES from '../../helpers/TURN_STATES';
 import './GameBoard.css';
-
-/*
-What this component does:
-- take gameState prop (latest gameState on stack/list passed from <App>)
-- determine winner
-- if winner: turnState = closed; pass updated state to <App>
-- else: increment turn
-- if currPlayer === user: handle user turn
-- else generate CPU move
-- handle column update
-- pass updated game state to <App>
-*/
-
-/*
-turn state logic:
-- (begin)
-- ACCEPT_USER_MOVE
-- HANDLE_USER_MOVE => determineWinner
-- ACCEPT_CPU_MOVE => incrementTurn
-- HANDLE_CPU_MOVE => determineWinner
-*/
 
 class GameBoard extends Component {
 	constructor(props) {
 		super(props);
-		this.updateGameState = this.updateGameState.bind(this);
-		this.determineWinner = this.determineWinner.bind(this);
-		this.handleColumnClick = this.handleColumnClick.bind(this);
-		this.getCPUMove = this.getCPUMove.bind(this);
-		this.getUpdatedColumns = this.getUpdatedColumns.bind(this);
+		const columns = Array.from({length: this.props.factorDepth},
+			_ => Array.from({length: this.props.factorDepth}, 
+				_ => undefined));
+		this.state = {
+			currentUser: 'user',
+			columns
+		};
+		this.handleUserColSelect = this.handleUserColSelect.bind(this);
+		this.getUpdatedColumnList = this.getUpdatedColumnList.bind(this);
+		this.isWinner = this.isWinner.bind(this);
+		this.handleAdvanceTurn = this.handleAdvanceTurn.bind(this);
+		this.setCPUMove = this.setCPUMove.bind(this);
+	}
+	
+	handleUserColSelect(colIndex) {
+		if (this.state.currentUser !== 'user' || this.props.isClosed) return;
+		const isColOpen = this.state.columns[colIndex].some(el => el === undefined);
+		if (!isColOpen) return;
+		this.handleAdvanceTurn(this.getUpdatedColumnList(colIndex));
+	}
+	
+	getUpdatedColumnList(colIndex) {
+		let openSlot = this.props.factorDepth - 1;
+		for (let slotIndex = 0; slotIndex <= openSlot; slotIndex++) {
+			if (this.state.columns[colIndex][slotIndex] !== undefined) {
+				openSlot = slotIndex - 1;
+				break;
+			}
+		}
+		const updatedColumn = this.state.columns[colIndex];
+		updatedColumn[openSlot] = this.state.currentUser;
+		const updatedColumnList = this.state.columns;
+		updatedColumnList[colIndex] = updatedColumn;
+		return updatedColumnList;
+	}
+	
+	isWinner() {
+		const diagonal = (role) => {
+			const equalIndex = (_, colIndex) => this.state.columns[colIndex][colIndex] === role;
+			return this.state.columns.every(equalIndex);
+		}
+		const invertedDiagonal = (role) => {
+			const invertedIndex = (_, colIndex) => this.state.columns[colIndex][this.props.factorDepth - 1 - colIndex] === role;
+			return this.state.columns.every(invertedIndex);
+		};
+		const horizontalLine = (role) => {
+			let memo = [];
+			for (let colIndex = 0; colIndex < this.props.factorDepth; colIndex++) {
+				console.log('checking colIndex', colIndex, 'until', this.props.factorDepth);
+				const slotIndices = this.state.columns[colIndex]
+					.map((s, i) => s !== role ? s : i)
+					.filter(s => s !== undefined);
+				if (colIndex === 0) memo = slotIndices;
+				memo = slotIndices.filter(i => memo.indexOf(i) > -1);
+				if (memo.length === 0) return false;
+			}
+			return true;
+		}
+		const verticalLine = (role) => {
+			const isColumnFull = (_, colIndex) => this.state.columns[colIndex].every(slot => slot === role);
+			return this.state.columns.some(isColumnFull);
+		}
+		return diagonal(this.state.currentUser) ||
+			invertedDiagonal(this.state.currentUser) ||
+			horizontalLine(this.state.currentUser) ||
+			verticalLine(this.state.currentUser);
 	}
 
-	componentDidUpdate(prevProps) {
-		console.log('componentDidUpdate', this.props);
-		if (this.props.gameState.turnState === TURN_STATES.ACCEPT_MOVE_USER || this.props.gameState.turnState === TURN_STATES.INACTIVE) return;
-		if (this.props.gameState.turnState === TURN_STATES.ACCEPT_MOVE_CPU) this.updateGameState({columnStates: this.getUpdatedColumns(this.getCPUMove())});
-		if (this.props.gameState.turnState === TURN_STATES.EVALUATE_MOVE_USER || this.props.gameState.turnState === TURN_STATES.EVALUATE_MOVE_CPU) this.updateGameState({winner: this.isWinner()});
-	}
-	
-	shouldComponentUpdate(prevProps) {
-		console.log('prevProps', prevProps, 'this.props', this.props);
-		return true; //prevProps.turnIndex !== this.props.turnIndex;
-	}
-	
-	updateGameState(stateObj) {
-		const withTurnIncrement = Object.assign(stateObj, {turnState: this.nextTurn});
-		// console.log('updateGameState', withTurnIncrement);
-		this.props.handleGameStateUpdate(withTurnIncrement);
-	}
-	
-	determineWinner() { //returns 'user' || 'cpu' || false
-		//tests
-		const horizontalLine = () => false;
-		const verticalLine = () => false;
-		const positiveDiagonal = () => false;
-		const negativeDiagonal = () => false;
-		const winner = horizontalLine() ||
-			verticalLine() ||
-			positiveDiagonal() ||
-			negativeDiagonal();
-		return winner;
-	}
-	
-	get nextTurn() {
-		if (this.props.gameState.winner) return TURN_STATES.INACTIVE;
-		const currentPlayerLogic = {
-			[TURN_STATES.ACCEPT_USER_MOVE]: TURN_STATES.HANDLE_CPU_MOVE,
-			[TURN_STATES.ACCEPT_MOVE_CPU]: TURN_STATES.ACCEPT_CPU_MOVE,
-			[TURN_STATES.HANDLE_USER_MOVE]: TURN_STATES.ACCEPT_CPU_MOVE,
-			[TURN_STATES.HANDLE_CPU_MOVE]: TURN_STATES.ACCEPT_USER_MOVE,
-		};
-		return currentPlayerLogic[this.props.gameState.turnState];
-	}
-	
-	handleColumnClick(column) { //conditionally passes user's selection to getUpdatedColumns
-		// console.log(column);
-		if (this.props.turnState !== TURN_STATES.ACCEPT_USER_MOVE) {
-			console.info('Oops! Not your turn yet.');
-			return;
+	handleAdvanceTurn(updatedColumnList) {
+		if (this.isWinner()) {
+			this.setState({
+				columns: updatedColumnList
+			}, () => this.props.handleWinner(this.state.currentUser)
+			);
 		}
-		this.updateGameState({columnStates: this.getUpdatedColumns(column, 'user')});
+		else {
+			const updatedUser = this.state.currentUser === 'user' ? 'cpu' : 'user';
+			this.setState({
+				currentUser: updatedUser,
+				columns: updatedColumnList
+			}, () => {
+				if (this.state.currentUser === 'cpu') this.setCPUMove();
+			});
+		}
 	}
 	
-	getUpdatedColumns(column, role) { //return new game grid
-		let lastIndex;
-		for (let ind = 0; ind < this.props.factorDepth; ind++) {
-			if (!this.props.gameState.columnStates[column][ind]) lastIndex = ind;
-		}
-		if (lastIndex === undefined) { //passively avoid user picking "full" column
-			console.log('Won\'t fit!');
-			return false;
-		}
-		if (lastIndex === -1) lastIndex = this.props.factorDepth - 1; //empty column
-		let updatedColumn = this.props.gameState.columnStates[column];
-		updatedColumn[lastIndex] = 'user';
-		let columnStates = this.props.gameState.columnStates;
-		columnStates[column] = updatedColumn;
-		return columnStates;
-	}
-	
-	getCPUMove() {
-		let openColumns;
-		for (let i = 0; i < this.props.factorDepth; i++) {
-			if (this.props.gameState.columnStates[i].some(slot => slot === false)) openColumns.push(i)
-		}
-		return openColumns[Math.floor(Math.random() * openColumns.length)];
+	setCPUMove() {
+		const openColumns = this.state;
+		const cpuSelectedColumn = 0;
+		this.handleAdvanceTurn(this.getUpdatedColumnList(cpuSelectedColumn));
 	}
 	
 	render() {
-		const columns = this.props.gameState.columnStates.map((slots, i) => <Column key={i} ind={i} slotStates={slots} onClick={this.handleColumnClick}/>);
+		const columns = this.state.columns.map((slotStates, i) => <Column key={i} ind={i} onClick={this.handleUserColSelect} slotStates={slotStates}/>);
 		return (
 			<div className="columns-container" style={{gridTemplateColumns: `repeat(${this.props.factorDepth}, 64px)`}}>
 				{columns}

@@ -6,23 +6,3 @@
 	display: grid;
 	grid-gap: 16px;
 }
-.column {
-	display: grid;
-	grid-gap: 16px;
-}
-.slot {
-	display: block;
-	border-radius: 100%;
-	width: 64px;
-	height: 64px;
-}
-.slot.inactive {
-	background-color: #fff;
-	border: 1px dotted black;
-}
-.slot.active.user {
-	background-color: red;
-}
-.slot.active.cpu {
-	background-color: blue;
-}

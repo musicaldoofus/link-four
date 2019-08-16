@@ -53,14 +53,20 @@ class GameBoard extends Component {
 		const horizontalLine = (role) => {
 			let memo = [];
 			const toRoleIndex = (s, i) => s === role ? i : null;
-			const onlyIndices = (i) => i !== null && memo.indexOf(i) > -1;
+			const onlyIndices = (i) => i !== null;
+			const onlyInMemo= (i) => memo.length === 0 ? true : memo.indexOf(i) > -1;
 			for (let colIndex = 0; colIndex < this.props.factorDepth; colIndex++) {
 				// if (colIndex === 0) memo = slotIndices;
-				memo = this.state.columns[colIndex]
+				const updatedMemo = this.state.columns[colIndex]
 					.map(toRoleIndex)
 					.filter(onlyIndices);
+				// console.log('updated memo for', role, updatedMemo);
+				if (updatedMemo.length === 0) return false;
+				else {
+					memo = updatedMemo.filter(onlyInMemo);
+					if (memo.length === 0) return false;
+				}
 			}
-			if (memo.length === 0) return false;
 			return true;
 		}
 		const verticalLine = (role) => {
@@ -104,7 +110,9 @@ class GameBoard extends Component {
 			.map((column, colIndex) => column.some(slot => slot === undefined) ? colIndex : null)
 			.filter(c => c !== null);
 		const cpuSelectedColumn = openColumns[Math.floor(Math.random() * openColumns.length)];
-		this.handleAdvanceTurn(this.getUpdatedColumnList(cpuSelectedColumn));
+		window.setTimeout(
+			() => this.handleAdvanceTurn(this.getUpdatedColumnList(cpuSelectedColumn))
+			, 400);
 	}
 	
 	render() {

@@ -13,7 +13,21 @@ class App extends Component {
 	}
 	
 	handleWinner(winner) {
-		this.setState({winner});
+		/*
+		setState (lock GameBoard - set winner)
+		show modal
+		close modal (timeout for 1500ms)
+		setState (unlock GameBoard - set winner = undefined and factorDepth += 1)
+		*/
+		const releaseGameState = () => {
+			return window.setTimeout(() => this.setState({
+				winner: undefined,
+				factorDepth: this.state.factorDepth + 1
+			}), 1500);
+		}
+		this.setState({
+			winner
+		}, releaseGameState);
 	}
 	
 	render() {
@@ -21,8 +35,9 @@ class App extends Component {
 			<div className="app">
 				<div id="display">
 					<p>Winner: {this.state.winner}</p>
+					<p>factorDepth: {this.state.factorDepth}</p>
 				</div>
-				{this.state.gameState !== 'winner' &&
+				{this.state.winner === undefined &&
 					<GameBoard
 						isClosed={this.state.winner !== undefined}
 						factorDepth={this.state.factorDepth}

@@ -14,8 +14,9 @@ class GameBoard extends Component {
 		this.handleAdvanceTurn = this.handleAdvanceTurn.bind(this);
 		this.setCPUMove = this.setCPUMove.bind(this);
 	}
-	
+
 	handleUserColSelect(colIndex) {
+		console.log('handleUserColSelect', colIndex);
 		if (this.state.currentUser !== 'user' || this.props.isClosed) return;
 		const isColOpen = this.props.columns[colIndex].some(el => el === undefined);
 		if (!isColOpen) return;
@@ -77,22 +78,40 @@ class GameBoard extends Component {
 	}
 
 	handleAdvanceTurn(updatedColumnList) {
-		if (this.isWinner()) this.props.handleWinner(this.state.currentUser);
-		else {
-			const updatedUser = this.state.currentUser === 'user' ? 'cpu' : 'user';
-			this.setState({
-				currentUser: updatedUser
-			}, () => {
-				if (this.state.currentUser === 'cpu') this.setCPUMove();
-			});
-		}
+		this.props.incrementScore(this.state.currentUser, 1);
+		const isWinner = this.isWinner();
+		if (isWinner) this.props.handleWinner(this.state.currentUser);
+		const updatedUser = this.state.currentUser === 'user' ? 'cpu' : 'user';
+		this.setState({
+			currentUser: updatedUser
+		}, () => {
+			//console.log('state check', this.state);
+			if (this.state.currentUser === 'cpu') {
+				if (isWinner) window.setTimeout(this.setCPUMove, this.props.closeOutTime)
+				else this.setCPUMove();
+			}
+			if (this.state.currentUser === 'user') {
+				const isColumnFull = (col) => col.every(slot => slot !== undefined);
+				if (this.props.columns.every(isColumnFull)) {
+					this.props.handleTie();
+					return;
+				}
+			}
+		});
 	}
 	
 	setCPUMove() {
+		console.log('setCPUMove');
 		const openColumns = this.props.columns
 			.map((column, colIndex) => column.some(slot => slot === undefined) ? colIndex : null)
 			.filter(c => c !== null);
-		const cpuSelectedColumn = openColumns[Math.floor(Math.random() * openColumns.length)];
+		console.log(openColumns);
+		if (openColumns.length === 0) {
+			this.props.handleTie();
+			return;
+		}
+		const cpuRandIndex = Math.floor(Math.random() * openColumns.length);
+		const cpuSelectedColumn = openColumns[cpuRandIndex];
 		window.setTimeout(
 			() => this.handleAdvanceTurn(this.getUpdatedColumnList(cpuSelectedColumn))
 			, 400);

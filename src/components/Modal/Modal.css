@@ -11,6 +11,9 @@
     z-index: 1000;
     transition: opacity ease 0.4s;
     opacity: 0;
+    display: flex;
+    display: -ms-flexbox;
+    display: -webkit-flex;
 }
 .modal-container.open {
     opacity: 1;
@@ -19,8 +22,14 @@
     opacity: 0;
 }
 .modal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(50%);
+    margin: auto;
+    border: 1px solid gray;
+    background-color: #fff;
+    padding: 2em;
+}
+.modal > p {
+    text-align: center;
+}
+.modal > p:first-child {
+    font-size: 3em;
 }

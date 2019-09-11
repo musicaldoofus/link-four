@@ -1,1 +1,16 @@
 /*HUD.css*/
+.heads-up-display {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    padding-bottom: 4em;
+}
+.heads-up-display > div {
+    display: flex;
+    flex-direction: column;
+}
+.heads-up-display > div > div {
+    text-align: center;
+}
+div#controls > button {
+    width: 100%;
+}

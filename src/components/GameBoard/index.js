@@ -16,7 +16,6 @@ class GameBoard extends Component {
 	}
 
 	handleUserColSelect(colIndex) {
-		console.log('handleUserColSelect', colIndex);
 		if (this.state.currentUser !== 'user' || this.props.isClosed) return;
 		const isColOpen = this.props.columns[colIndex].some(el => el === undefined);
 		if (!isColOpen) return;
@@ -85,7 +84,6 @@ class GameBoard extends Component {
 		this.setState({
 			currentUser: updatedUser
 		}, () => {
-			//console.log('state check', this.state);
 			if (this.state.currentUser === 'cpu') {
 				if (isWinner) window.setTimeout(this.setCPUMove, this.props.closeOutTime)
 				else this.setCPUMove();
@@ -101,11 +99,9 @@ class GameBoard extends Component {
 	}
 	
 	setCPUMove() {
-		console.log('setCPUMove');
 		const openColumns = this.props.columns
 			.map((column, colIndex) => column.some(slot => slot === undefined) ? colIndex : null)
 			.filter(c => c !== null);
-		console.log(openColumns);
 		if (openColumns.length === 0) {
 			this.props.handleTie();
 			return;

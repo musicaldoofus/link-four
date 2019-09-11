@@ -8,12 +8,14 @@ class App extends Component {
 	constructor() {
 		super();
 		this.initFactorDepth = 3;
+		this.initScores = {
+			user: 0,
+			cpu: 0
+		};
 		this.state = {
+			showGameBoard: true,
 			factorDepth: this.initFactorDepth,
-			scores: {
-				user: 0,
-				cpu: 0
-			},
+			scores: this.initScores,
 			winner: undefined,
 			columns: this.getNewColumns()
 		};
@@ -21,11 +23,11 @@ class App extends Component {
 		this.handleWinner = this.handleWinner.bind(this);
 		this.getNewColumns = this.getNewColumns.bind(this);
 		this.incrementScore = this.incrementScore.bind(this);
+		this.handleRefresh = this.handleRefresh.bind(this);
 	}
 
 	getNewColumns(depth) {
-		const increment = depth ? depth : 1;
-		const levelUpFactorDepth = this.state ? this.state.factorDepth + increment : this.initFactorDepth;
+		const levelUpFactorDepth = depth !== undefined ? depth : (this.state ? this.state.factorDepth + 1 : this.initFactorDepth);
 		const arrayTemplate = {
 			length: levelUpFactorDepth
 		};
@@ -33,18 +35,15 @@ class App extends Component {
 	}
 
 	incrementScore(role, amt) {
-		console.log('incrementScore', role, amt, this.state.scores);
 		const opponentRole = role === 'user' ? 'cpu' : 'user';
 		const scores = {
 			[role]: this.state.scores[role] + (amt ? amt : 1),
 			[opponentRole]: this.state.scores[opponentRole]
 		};
-		console.log('updated scores', scores);
 		this.setState({scores});
 	}
 	
 	handleWinner(winner) {
-		console.log('handleWinner', winner);
 		const successIncrement = this.state.factorDepth * 2;
 		const increment = winner === 'tie' ? -successIncrement : 1;
 		const user = winner === 'user' ? this.state.scores.user + successIncrement : this.state.scores.user + increment;
@@ -65,6 +64,20 @@ class App extends Component {
 			winner
 		}, releaseGameState);
 	}
+
+	handleRefresh() {
+		this.setState({
+			showGameBoard: true,
+			winner: undefined,
+			factorDepth: this.initFactorDepth,
+			columns: this.getNewColumns(this.initFactorDepth),
+			scores: this.initScores
+		}, () => {
+			window.setTimeout(() => this.setState({
+				showGameBoard: true
+			}), 100)
+		});
+	}
 	
 	render() {
 		return (
@@ -72,25 +85,28 @@ class App extends Component {
 				<div id="display">
 					<HUD
 						scores={this.state.scores}
+						handleRefresh={this.handleRefresh}
 					/>
-					<GameBoard
-						isClosed={this.state.winner !== undefined}
-						factorDepth={this.state.factorDepth}
-						columns={this.state.columns}
-						incrementScore={this.incrementScore}
-						handleWinner={this.handleWinner}
-						handleTie={() => this.handleWinner('tie')}
-						closeOutTime={this.closeOutTime}
-					/>
-					{this.state.winner && (
-						<Modal
+					{this.state.showGameBoard && (
+						<GameBoard
+							isClosed={this.state.winner !== undefined}
+							factorDepth={this.state.factorDepth}
+							columns={this.state.columns}
+							incrementScore={this.incrementScore}
+							handleWinner={this.handleWinner}
+							handleTie={() => this.handleWinner('tie')}
 							closeOutTime={this.closeOutTime}
-						>
-							<p>{this.state.winner === 'tie' ? 'Tie...' : 'Winner!'}</p>
-							<p>{this.state.winner === 'tie' ? ':-(' : this.state.winner}</p>
-						</Modal>
+						/>
 					)}
 				</div>
+				{this.state.winner && (
+					<Modal
+						closeOutTime={this.closeOutTime}
+					>
+						<p>{this.state.winner === 'tie' ? 'Tie...' : 'Winner!'}</p>
+						<p>{this.state.winner === 'tie' ? ':-(' : this.state.winner}</p>
+					</Modal>
+				)}
 			</div>
 		);
 	}

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import GameBoard from './components/GameBoard';
+import Modal from './components/Modal';
 import './App.css';
 
 class App extends Component {
@@ -9,6 +10,7 @@ class App extends Component {
 			factorDepth: 4,
 			winner: undefined
 		};
+		this.closeOutTime = 1500;
 		this.handleWinner = this.handleWinner.bind(this);
 	}
 	
@@ -23,7 +25,7 @@ class App extends Component {
 			return window.setTimeout(() => this.setState({
 				winner: undefined,
 				factorDepth: this.state.factorDepth + 1
-			}), 1500);
+			}), this.closeOutTime);
 		}
 		this.setState({
 			winner
@@ -37,12 +39,20 @@ class App extends Component {
 					<p>Winner: {this.state.winner}</p>
 					<p>factorDepth: {this.state.factorDepth}</p>
 				</div>
-				{this.state.winner === undefined &&
+				{this.state.winner ? (
+					<Modal
+						closeOut={this.closeOutTime}
+					>
+						<p>Winner!</p>
+						<p>{this.state.winner}</p>
+					</Modal>
+				) : (
 					<GameBoard
 						isClosed={this.state.winner !== undefined}
 						factorDepth={this.state.factorDepth}
 						handleWinner={this.handleWinner}
 					/>
+				)
 				}
 			</div>
 		);

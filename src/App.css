@@ -8,11 +8,16 @@ body, html {
     margin: 0;
     padding: 0;
 }
-div#root, div.app, div#display {
+div#root, div.app {
     height: inherit;
+}
+div#display {
+    margin: auto;
 }
 .app {
     position: relative;
+    display: -ms-flexbox;
+    display: -webkit-flex;
     display: flex;
 }
 p {

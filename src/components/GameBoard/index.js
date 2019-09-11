@@ -5,12 +5,8 @@ import './GameBoard.css';
 class GameBoard extends Component {
 	constructor(props) {
 		super(props);
-		const columns = Array.from({length: this.props.factorDepth},
-			_ => Array.from({length: this.props.factorDepth}, 
-				_ => undefined));
 		this.state = {
-			currentUser: 'user',
-			columns
+			currentUser: 'user'
 		};
 		this.handleUserColSelect = this.handleUserColSelect.bind(this);
 		this.getUpdatedColumnList = this.getUpdatedColumnList.bind(this);
@@ -21,7 +17,7 @@ class GameBoard extends Component {
 	
 	handleUserColSelect(colIndex) {
 		if (this.state.currentUser !== 'user' || this.props.isClosed) return;
-		const isColOpen = this.state.columns[colIndex].some(el => el === undefined);
+		const isColOpen = this.props.columns[colIndex].some(el => el === undefined);
 		if (!isColOpen) return;
 		this.handleAdvanceTurn(this.getUpdatedColumnList(colIndex));
 	}
@@ -29,26 +25,26 @@ class GameBoard extends Component {
 	getUpdatedColumnList(colIndex) {
 		let openSlot = this.props.factorDepth - 1;
 		for (let slotIndex = 0; slotIndex <= openSlot; slotIndex++) {
-			if (this.state.columns[colIndex][slotIndex] !== undefined) {
+			if (this.props.columns[colIndex][slotIndex] !== undefined) {
 				openSlot = slotIndex - 1;
 				break;
 			}
 		}
-		const updatedColumn = this.state.columns[colIndex];
+		const updatedColumn = this.props.columns[colIndex];
 		updatedColumn[openSlot] = this.state.currentUser;
-		const updatedColumnList = this.state.columns;
+		const updatedColumnList = this.props.columns;
 		updatedColumnList[colIndex] = updatedColumn;
 		return updatedColumnList;
 	}
 	
 	isWinner() {
 		const diagonal = (role) => {
-			const equalIndex = (_, colIndex) => this.state.columns[colIndex][colIndex] === role;
-			return this.state.columns.every(equalIndex);
+			const equalIndex = (_, colIndex) => this.props.columns[colIndex][colIndex] === role;
+			return this.props.columns.every(equalIndex);
 		}
 		const invertedDiagonal = (role) => {
-			const invertedIndex = (_, colIndex) => this.state.columns[colIndex][this.props.factorDepth - 1 - colIndex] === role;
-			return this.state.columns.every(invertedIndex);
+			const invertedIndex = (_, colIndex) => this.props.columns[colIndex][this.props.factorDepth - 1 - colIndex] === role;
+			return this.props.columns.every(invertedIndex);
 		};
 		const horizontalLine = (role) => {
 			let memo = [];
@@ -56,11 +52,9 @@ class GameBoard extends Component {
 			const onlyIndices = (i) => i !== null;
 			const onlyInMemo= (i) => memo.length === 0 ? true : memo.indexOf(i) > -1;
 			for (let colIndex = 0; colIndex < this.props.factorDepth; colIndex++) {
-				// if (colIndex === 0) memo = slotIndices;
-				const updatedMemo = this.state.columns[colIndex]
+				const updatedMemo = this.props.columns[colIndex]
 					.map(toRoleIndex)
 					.filter(onlyIndices);
-				// console.log('updated memo for', role, updatedMemo);
 				if (updatedMemo.length === 0) return false;
 				else {
 					memo = updatedMemo.filter(onlyInMemo);
@@ -70,21 +64,16 @@ class GameBoard extends Component {
 			return true;
 		}
 		const verticalLine = (role) => {
-			const isColumnFull = (_, colIndex) => this.state.columns[colIndex].every(slot => slot === role);
-			return this.state.columns.some(isColumnFull);
+			const isColumnFull = (_, colIndex) => this.props.columns[colIndex].every(slot => slot === role);
+			return this.props.columns.some(isColumnFull);
 		}
-		// const winnerTests = [
-			// diagonal,
-			// invertedDiagonal,
-			// horizontalLine,
-			// verticalLine
-		// ];
-		// console.log('tests for:', this.state.currentUser);
-		// winnerTests.forEach(test => console.log(test(this.state.currentUser)));
-		return diagonal(this.state.currentUser) ||
-			invertedDiagonal(this.state.currentUser) ||
-			horizontalLine(this.state.currentUser) ||
-			verticalLine(this.state.currentUser);
+		const winnerTests = [
+			diagonal,
+			invertedDiagonal,
+			horizontalLine,
+			verticalLine
+		];
+		return winnerTests.some(test => test(this.state.currentUser));
 	}
 
 	handleAdvanceTurn(updatedColumnList) {
@@ -106,7 +95,7 @@ class GameBoard extends Component {
 	}
 	
 	setCPUMove() {
-		const openColumns = this.state.columns
+		const openColumns = this.props.columns
 			.map((column, colIndex) => column.some(slot => slot === undefined) ? colIndex : null)
 			.filter(c => c !== null);
 		const cpuSelectedColumn = openColumns[Math.floor(Math.random() * openColumns.length)];
@@ -116,7 +105,7 @@ class GameBoard extends Component {
 	}
 	
 	render() {
-		const columns = this.state.columns.map((slotStates, i) => <Column key={i} ind={i} onClick={this.handleUserColSelect} slotStates={slotStates}/>);
+		const columns = this.props.columns.map((slotStates, i) => <Column key={i} ind={i} onClick={this.handleUserColSelect} slotStates={slotStates}/>);
 		return (
 			<div className="columns-container" style={{gridTemplateColumns: `repeat(${this.props.factorDepth}, 64px)`}}>
 				{columns}

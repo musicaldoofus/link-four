@@ -20,7 +20,7 @@ class App extends Component {
 	getNewColumns() {
 		return Array.from({length: this.state ? this.state.factorDepth + 1 : this.initFactorDepth},
 			_ => Array.from({length: this.state ? this.state.factorDepth + 1 : this.initFactorDepth}, 
-				_ => undefined))
+				_ => undefined));
 	}
 	
 	handleWinner(winner) {

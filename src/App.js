@@ -7,10 +7,10 @@ class App extends Component {
 	constructor() {
 		super();
 		this.state = {
-			factorDepth: 4,
+			factorDepth: 3,
 			winner: undefined
 		};
-		this.closeOutTime = 1500;
+		this.closeOutTime = 2500;
 		this.handleWinner = this.handleWinner.bind(this);
 	}
 	
@@ -38,22 +38,20 @@ class App extends Component {
 				<div id="display">
 					<p>Winner: {this.state.winner}</p>
 					<p>factorDepth: {this.state.factorDepth}</p>
-				</div>
-				{this.state.winner ? (
-					<Modal
-						closeOut={this.closeOutTime}
-					>
-						<p>Winner!</p>
-						<p>{this.state.winner}</p>
-					</Modal>
-				) : (
+					{this.state.winner && (
+						<Modal
+							closeOutTime={this.closeOutTime}
+						>
+							<p>Winner!</p>
+							<p>{this.state.winner}</p>
+						</Modal>
+					)}
 					<GameBoard
 						isClosed={this.state.winner !== undefined}
 						factorDepth={this.state.factorDepth}
 						handleWinner={this.handleWinner}
 					/>
-				)
-				}
+				</div>
 			</div>
 		);
 	}

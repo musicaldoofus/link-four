@@ -6,19 +6,29 @@ import './App.css';
 class App extends Component {
 	constructor() {
 		super();
+		this.initFactorDepth = 3;
 		this.state = {
-			factorDepth: 3,
-			winner: undefined
+			factorDepth: this.initFactorDepth,
+			winner: undefined,
+			columns: this.getNewColumns()
 		};
 		this.closeOutTime = 2500;
 		this.handleWinner = this.handleWinner.bind(this);
+		this.getNewColumns = this.getNewColumns.bind(this);
+	}
+
+	getNewColumns() {
+		return Array.from({length: this.state ? this.state.factorDepth + 1 : this.initFactorDepth},
+			_ => Array.from({length: this.state ? this.state.factorDepth + 1 : this.initFactorDepth}, 
+				_ => undefined))
 	}
 	
 	handleWinner(winner) {
 		const releaseGameState = () => {
 			return window.setTimeout(() => this.setState({
 				winner: undefined,
-				factorDepth: this.state.factorDepth + 1
+				factorDepth: this.state.factorDepth + 1,
+				columns: this.getNewColumns()
 			}), this.closeOutTime);
 		}
 		this.setState({
@@ -27,9 +37,6 @@ class App extends Component {
 	}
 	
 	render() {
-		const columns = Array.from({length: this.state.factorDepth},
-			_ => Array.from({length: this.state.factorDepth}, 
-				_ => undefined));
 		return (
 			<div className="app">
 				<div id="display">
@@ -44,7 +51,7 @@ class App extends Component {
 					<GameBoard
 						isClosed={this.state.winner !== undefined}
 						factorDepth={this.state.factorDepth}
-						columns={columns}
+						columns={this.state.columns}
 						handleWinner={this.handleWinner}
 					/>
 				</div>

@@ -77,17 +77,11 @@ class GameBoard extends Component {
 	}
 
 	handleAdvanceTurn(updatedColumnList) {
-		if (this.isWinner()) {
-			this.setState({
-				columns: updatedColumnList
-			}, () => this.props.handleWinner(this.state.currentUser)
-			);
-		}
+		if (this.isWinner()) this.props.handleWinner(this.state.currentUser);
 		else {
 			const updatedUser = this.state.currentUser === 'user' ? 'cpu' : 'user';
 			this.setState({
-				currentUser: updatedUser,
-				columns: updatedColumnList
+				currentUser: updatedUser
 			}, () => {
 				if (this.state.currentUser === 'cpu') this.setCPUMove();
 			});

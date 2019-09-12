@@ -58,11 +58,11 @@ class App extends Component {
 			winner,
 			scores
 		}, () => {
-			return window.setTimeout(() => this.handleRefresh(winner !== 'tie'), this.closeOutTime);
+			return window.setTimeout(() => this.handleRefresh(winner === 'tie' ? -1 : 1), this.closeOutTime);
 		});
 	}
 
-	handleRefresh(increment) { //this sux
+	handleRefresh(increment) {
 		console.log('handleRefresh', increment);
 		const factorDepth = increment ? this.state.factorDepth + increment : this.initFactorDepth;
 		const scores = increment ? this.state.scores : this.initScores;

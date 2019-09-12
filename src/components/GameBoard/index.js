@@ -89,7 +89,7 @@ class GameBoard extends Component {
 				.map((column, colIndex) => column.some(slot => slot === undefined) ? colIndex : null)
 				.filter(c => c !== null);
 			if (this.state.currentUser === 'cpu') {
-				if (isWinner) window.setTimeout(() => this.setCPUMove(), this.props.closeOutTime)
+				if (isWinner) window.setTimeout(this.setCPUMove, this.props.closeOutTime * 2)
 				else this.setCPUMove();
 			}
 			if (this.state.currentUser === 'user') {

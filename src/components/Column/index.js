@@ -8,22 +8,20 @@ const Slot = ({user}) => (
 	</div>
 );
 
-class Column extends Component {
+const Column = (props) => {
 	/*shouldComponentUpdate(prevProps) {
 		const condition = prevProps.slotStates.every((slot, i) => slot === this.props.slotStates[i]);
 		console.log('Column.props', !condition, prevProps.slotStates, this.props.slotStates);
 		return !condition;
 	}*/
 
-	render() {
-		const isColumnFull = this.props.slotStates.every(slot => slot !== undefined);
-		const slots = this.props.slotStates.map((user, i) => <Slot key={i} user={user}/>);
-		return (
-			<div className={`column ${isColumnFull ? 'closed' : 'open'}`} onClick={() => this.props.onClick(this.props.ind)}>
-				{slots}
-			</div>
-		);
-	}
-} 
+	const isColumnFull = props.slotStates.every(slot => slot !== undefined);
+	const slots = props.slotStates.map((user, i) => <Slot key={i} user={user}/>);
+	return (
+		<div className={`column ${isColumnFull ? 'closed' : 'open'}`} onClick={() => props.onClick(props.ind)}>
+			{slots}
+		</div>
+	);
+}
 
 export default Column;

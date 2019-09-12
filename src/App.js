@@ -12,13 +12,14 @@ class App extends Component {
 			user: 0,
 			cpu: 0
 		};
-		this.state = {
+		this.initState = {
 			showGameBoard: true,
 			factorDepth: this.initFactorDepth,
 			scores: this.initScores,
 			winner: undefined,
 			columns: this.getNewColumns()
 		};
+		this.state = this.initState;
 		this.closeOutTime = 2500;
 		this.handleWinner = this.handleWinner.bind(this);
 		this.getNewColumns = this.getNewColumns.bind(this);
@@ -44,6 +45,7 @@ class App extends Component {
 	}
 	
 	handleWinner(winner) {
+		//console.log('handleWinner', winner);
 		const successIncrement = this.state.factorDepth * 2;
 		const increment = winner === 'tie' ? -successIncrement : 1;
 		const user = winner === 'user' ? this.state.scores.user + successIncrement : this.state.scores.user + increment;
@@ -52,30 +54,29 @@ class App extends Component {
 			user,
 			cpu
 		};
-		const releaseGameState = () => {
-			return window.setTimeout(() => this.setState({
-				winner: undefined,
-				scores,
-				factorDepth: this.state.factorDepth + 1,
-				columns: this.getNewColumns()
-			}), this.closeOutTime);
-		}
 		this.setState({
-			winner
-		}, releaseGameState);
+			winner,
+			scores
+		}, () => {
+			return window.setTimeout(() => this.handleRefresh(winner !== 'tie'), this.closeOutTime);
+		});
 	}
 
-	handleRefresh() {
-		this.setState({
-			showGameBoard: true,
-			winner: undefined,
-			factorDepth: this.initFactorDepth,
-			columns: this.getNewColumns(this.initFactorDepth),
-			scores: this.initScores
-		}, () => {
+	handleRefresh(increment) { //this sux
+		console.log('handleRefresh', increment);
+		const factorDepth = increment ? this.state.factorDepth + increment : this.initFactorDepth;
+		const scores = increment ? this.state.scores : this.initScores;
+		const toggleState = Object.assign({}, this.initState, {
+			showGameBoard: false,
+			factorDepth,
+			columns: this.getNewColumns(factorDepth),
+			scores
+		});
+		console.log('toggleState', toggleState);
+		this.setState(toggleState, () => {
 			window.setTimeout(() => this.setState({
 				showGameBoard: true
-			}), 100)
+			}), 10)
 		});
 	}
 	
@@ -85,7 +86,7 @@ class App extends Component {
 				<div id="display">
 					<HUD
 						scores={this.state.scores}
-						handleRefresh={this.handleRefresh}
+						handleRefresh={() => this.handleRefresh()}
 					/>
 					{this.state.showGameBoard && (
 						<GameBoard

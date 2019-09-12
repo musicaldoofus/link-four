@@ -77,6 +77,7 @@ class GameBoard extends Component {
 	}
 
 	handleAdvanceTurn(updatedColumnList) {
+		console.log('handleAdvanceTurn');
 		this.props.incrementScore(this.state.currentUser, 1);
 		const isWinner = this.isWinner();
 		if (isWinner) this.props.handleWinner(this.state.currentUser);
@@ -84,13 +85,15 @@ class GameBoard extends Component {
 		this.setState({
 			currentUser: updatedUser
 		}, () => {
+			const openColumns = this.props.columns
+				.map((column, colIndex) => column.some(slot => slot === undefined) ? colIndex : null)
+				.filter(c => c !== null);
 			if (this.state.currentUser === 'cpu') {
-				if (isWinner) window.setTimeout(this.setCPUMove, this.props.closeOutTime)
+				if (isWinner) window.setTimeout(() => this.setCPUMove(), this.props.closeOutTime)
 				else this.setCPUMove();
 			}
 			if (this.state.currentUser === 'user') {
-				const isColumnFull = (col) => col.every(slot => slot !== undefined);
-				if (this.props.columns.every(isColumnFull)) {
+				if (openColumns.length === 0) {
 					this.props.handleTie();
 					return;
 				}
@@ -102,6 +105,7 @@ class GameBoard extends Component {
 		const openColumns = this.props.columns
 			.map((column, colIndex) => column.some(slot => slot === undefined) ? colIndex : null)
 			.filter(c => c !== null);
+		console.log('setCPUMove', openColumns);
 		if (openColumns.length === 0) {
 			this.props.handleTie();
 			return;

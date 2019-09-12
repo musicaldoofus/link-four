@@ -16,23 +16,13 @@ class App extends Component {
 			showGameBoard: true,
 			factorDepth: this.initFactorDepth,
 			scores: this.initScores,
-			winner: undefined,
-			columns: this.getNewColumns()
+			winner: undefined
 		};
 		this.state = this.initState;
 		this.closeOutTime = 2500;
 		this.handleWinner = this.handleWinner.bind(this);
-		this.getNewColumns = this.getNewColumns.bind(this);
 		this.incrementScore = this.incrementScore.bind(this);
 		this.handleRefresh = this.handleRefresh.bind(this);
-	}
-
-	getNewColumns(depth) {
-		const levelUpFactorDepth = depth !== undefined ? depth : (this.state ? this.state.factorDepth + 1 : this.initFactorDepth);
-		const arrayTemplate = {
-			length: levelUpFactorDepth
-		};
-		return Array.from(arrayTemplate, _ => Array.from(arrayTemplate, _ => undefined));
 	}
 
 	incrementScore(role, amt) {
@@ -45,7 +35,6 @@ class App extends Component {
 	}
 	
 	handleWinner(winner) {
-		//console.log('handleWinner', winner);
 		const successIncrement = this.state.factorDepth * 2;
 		const increment = winner === 'tie' ? -successIncrement : 1;
 		const user = winner === 'user' ? this.state.scores.user + successIncrement : this.state.scores.user + increment;
@@ -63,16 +52,13 @@ class App extends Component {
 	}
 
 	handleRefresh(increment) {
-		console.log('handleRefresh', increment);
 		const factorDepth = increment ? this.state.factorDepth + increment : this.initFactorDepth;
 		const scores = increment ? this.state.scores : this.initScores;
 		const toggleState = Object.assign({}, this.initState, {
 			showGameBoard: false,
 			factorDepth,
-			columns: this.getNewColumns(factorDepth),
 			scores
 		});
-		console.log('toggleState', toggleState);
 		this.setState(toggleState, () => {
 			window.setTimeout(() => this.setState({
 				showGameBoard: true
@@ -92,11 +78,8 @@ class App extends Component {
 						<GameBoard
 							isClosed={this.state.winner !== undefined}
 							factorDepth={this.state.factorDepth}
-							columns={this.state.columns}
 							incrementScore={this.incrementScore}
 							handleWinner={this.handleWinner}
-							handleTie={() => this.handleWinner('tie')}
-							closeOutTime={this.closeOutTime}
 						/>
 					)}
 				</div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Token from '../Token';
 import './Column.css';
 
@@ -8,14 +8,22 @@ const Slot = ({user}) => (
 	</div>
 );
 
-const Column = ({slotStates, ind, onClick}) => {
-	const isColumnFull = slotStates.every(slot => slot !== undefined);
-	const slots = slotStates.map((user, i) => <Slot key={i} user={user}/>);
-	return (
-		<div className={`column ${isColumnFull ? 'closed' : 'open'}`} onClick={() => onClick(ind)}>
-			{slots}
-		</div>
-	);
-}
+class Column extends Component {
+	/*shouldComponentUpdate(prevProps) {
+		const condition = prevProps.slotStates.every((slot, i) => slot === this.props.slotStates[i]);
+		console.log('Column.props', !condition, prevProps.slotStates, this.props.slotStates);
+		return !condition;
+	}*/
+
+	render() {
+		const isColumnFull = this.props.slotStates.every(slot => slot !== undefined);
+		const slots = this.props.slotStates.map((user, i) => <Slot key={i} user={user}/>);
+		return (
+			<div className={`column ${isColumnFull ? 'closed' : 'open'}`} onClick={() => this.props.onClick(this.props.ind)}>
+				{slots}
+			</div>
+		);
+	}
+} 
 
 export default Column;

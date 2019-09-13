@@ -16,11 +16,3 @@
 	border-radius: 100%;
 	border: 2px solid black;
 }
-.column.closed::before {
-    content: "x";
-    position: absolute;
-    top: -1.2em;
-    font-size: 4em;
-    left: 50%;
-    transform: translateX(-50%);
-}

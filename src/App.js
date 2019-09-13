@@ -23,6 +23,7 @@ class App extends Component {
 		this.handleWinner = this.handleWinner.bind(this);
 		this.incrementScore = this.incrementScore.bind(this);
 		this.handleRefresh = this.handleRefresh.bind(this);
+		this.handleWindowHeightCheck = this.handleWindowHeightCheck.bind(this);
 	}
 
 	incrementScore(role, amt) {
@@ -58,10 +59,22 @@ class App extends Component {
 			scores
 		});
 		this.setState(toggleState, () => {
+			this.handleWindowHeightCheck();
 			window.setTimeout(() => this.setState({
 				showGameBoard: true
 			}), increment ? 400 : 10)
 		});
+	}
+
+	handleWindowHeightCheck() {
+		const heightEm = ((window.innerHeight * 3)/4)/12;
+		const showFooter = heightEm > (8 + (this.state.factorDepth * 4) + this.state.factorDepth + 8);
+		this.setState({showFooter});
+	}
+
+	componentDidMount() {
+		this.handleWindowHeightCheck();
+		window.addEventListener('resize', this.handleWindowHeightCheck)
 	}
 	
 	render() {
@@ -69,10 +82,9 @@ class App extends Component {
 			width: `${(this.state.factorDepth * 4) + this.state.factorDepth - 1 + 4}em`,
 			height: `${(this.state.factorDepth * 4) + this.state.factorDepth + 8}em`
 		};
-		console.log(boardContainerStyle);
 		return (
 			<div className="app">
-				<div className="board-container" style={boardContainerStyle}>
+				<main className="board-container" style={boardContainerStyle}>
 					<HUD
 						scores={this.state.scores}
 						handleRefresh={() => this.handleRefresh()}
@@ -85,7 +97,7 @@ class App extends Component {
 							handleWinner={this.handleWinner}
 						/>
 					)}
-				</div>
+				</main>
 				{this.state.winner && (
 					<Modal
 						closeOutTime={this.closeOutTime}
@@ -94,6 +106,13 @@ class App extends Component {
 						<p>{this.state.winner === 'tie' ? ':-(' : this.state.winner}</p>
 					</Modal>
 				)}
+				<footer className={this.state.showFooter ? 'showing' : 'hidden'} role="contentinfo">
+					<div>
+						<p>
+							Made with <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="React" title="React"/> and hosted with <span title="love">&#9829;</span> by GitHub
+						</p>
+					</div>
+				</footer>
 			</div>
 		);
 	}

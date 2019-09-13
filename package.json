@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://musicaldoofus.github.io/link-four/",
   "dependencies": {
+    "eslint-utils": ">=1.4.1",
     "gh-pages": "^2.1.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",

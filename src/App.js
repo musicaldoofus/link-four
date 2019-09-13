@@ -84,7 +84,6 @@ class App extends Component {
 		const padding = 3.5;
 		const hud = 6;
 		const width = `${gridSpaces + tokens + padding + hud}em`;
-		console.log(width);
 		const boardContainerStyle = {
 			width,
 			height: `${(this.state.factorDepth * 4) + this.state.factorDepth + 3}em`,
@@ -118,7 +117,7 @@ class App extends Component {
 				<footer className={this.state.showFooter ? 'showing' : 'hidden'} role="contentinfo">
 					<div>
 						<p>
-							Made with <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="React" title="React"/> and hosted with <span title="love">&#9829;</span> by GitHub
+							Made with <img id="react-logo" src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="React" title="React"/> and hosted with <span title="love">&#9829;</span> by GitHub
 						</p>
 					</div>
 				</footer>

@@ -53,8 +53,18 @@ footer > div {
     margin: auto;
     text-align: center;
 }
-footer img {
+img#react-logo {
     display: inline-block;
     height: 1.4em;
     margin: 0px -0.4em -0.3em -0.4em;
+    animation: rotate 2s;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }

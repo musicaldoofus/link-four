@@ -1,5 +1,8 @@
 /*GameBoard.css*/
-.columns-container {
+.game-board {
 	display: grid;
-	grid-gap: 1em;
+	grid-gap: 0.5em;
+	padding: 1em;
+	border: 1px solid gray;
+	background-color: #fff;
 }

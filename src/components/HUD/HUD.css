@@ -1,9 +1,10 @@
 /*HUD.css*/
 .heads-up-display {
     display: grid;
-    grid-template-columns: repeat(3, auto);
-    height: 4em;
-    padding-bottom: 2em;
+    grid-template-rows: repeat(3, auto);
+    width: 6em;
+    height: 100%;
+    border: 1px solid gray;
 }
 .heads-up-display > div {
     display: flex;

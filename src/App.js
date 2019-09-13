@@ -20,13 +20,13 @@ class App extends Component {
 		};
 		this.state = this.initState;
 		this.closeOutTime = 2500;
+		this.handleIncrementScore = this.handleIncrementScore.bind(this);
 		this.handleWinner = this.handleWinner.bind(this);
-		this.incrementScore = this.incrementScore.bind(this);
 		this.handleRefresh = this.handleRefresh.bind(this);
 		this.handleWindowHeightCheck = this.handleWindowHeightCheck.bind(this);
 	}
 
-	incrementScore(role, amt) {
+	handleIncrementScore(role, amt) {
 		const opponentRole = role === 'user' ? 'cpu' : 'user';
 		const scores = {
 			[role]: this.state.scores[role] + (amt ? amt : 1),
@@ -78,25 +78,34 @@ class App extends Component {
 	}
 	
 	render() {
+		const gridSpaces = (this.state.factorDepth - 1) * 0.5;
+		const tokens = this.state.factorDepth * 4;
+		const gameBoardPadding = 2;
+		const padding = 3.5;
+		const hud = 6;
+		const width = `${gridSpaces + tokens + padding + hud}em`;
+		console.log(width);
 		const boardContainerStyle = {
-			width: `${(this.state.factorDepth * 4) + this.state.factorDepth - 1 + 4}em`,
-			height: `${(this.state.factorDepth * 4) + this.state.factorDepth + 8}em`
+			width,
+			height: `${(this.state.factorDepth * 4) + this.state.factorDepth + 3}em`,
+			gridTemplateColumns: `${gridSpaces + tokens + gameBoardPadding}em 6em`
 		};
 		return (
 			<div className="app">
 				<main className="board-container" style={boardContainerStyle}>
+					{this.state.showGameBoard ? (
+						<GameBoard
+							factorDepth={this.state.factorDepth}
+							handleIncrementScore={this.handleIncrementScore}
+							handleWinner={this.handleWinner}
+						/>
+					) : (
+						<div className="empty-game-board"></div>
+					)}
 					<HUD
 						scores={this.state.scores}
 						handleRefresh={() => this.handleRefresh()}
 					/>
-					{this.state.showGameBoard && (
-						<GameBoard
-							isClosed={this.state.winner !== undefined}
-							factorDepth={this.state.factorDepth}
-							incrementScore={this.incrementScore}
-							handleWinner={this.handleWinner}
-						/>
-					)}
 				</main>
 				{this.state.winner && (
 					<Modal

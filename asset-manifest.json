@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/link-four/static/css/main.f2fda266.chunk.css",
-    "main.js": "/link-four/static/js/main.ca4a7503.chunk.js",
-    "main.js.map": "/link-four/static/js/main.ca4a7503.chunk.js.map",
+    "main.css": "/link-four/static/css/main.97cc1ecf.chunk.css",
+    "main.js": "/link-four/static/js/main.1abdabd9.chunk.js",
+    "main.js.map": "/link-four/static/js/main.1abdabd9.chunk.js.map",
     "runtime~main.js": "/link-four/static/js/runtime~main.cadb73ff.js",
     "runtime~main.js.map": "/link-four/static/js/runtime~main.cadb73ff.js.map",
     "static/js/2.b3b6012e.chunk.js": "/link-four/static/js/2.b3b6012e.chunk.js",
     "static/js/2.b3b6012e.chunk.js.map": "/link-four/static/js/2.b3b6012e.chunk.js.map",
     "index.html": "/link-four/index.html",
-    "precache-manifest.3d77e62c24d459921ad7cd76a8379d83.js": "/link-four/precache-manifest.3d77e62c24d459921ad7cd76a8379d83.js",
+    "precache-manifest.8e012a63242c8fa012ddfc47fb4827ee.js": "/link-four/precache-manifest.8e012a63242c8fa012ddfc47fb4827ee.js",
     "service-worker.js": "/link-four/service-worker.js",
-    "static/css/main.f2fda266.chunk.css.map": "/link-four/static/css/main.f2fda266.chunk.css.map"
+    "static/css/main.97cc1ecf.chunk.css.map": "/link-four/static/css/main.97cc1ecf.chunk.css.map"
   }
 }

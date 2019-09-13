@@ -59,6 +59,7 @@ class App extends Component {
 			scores
 		});
 		this.setState(toggleState, () => {
+			this.handleWindowHeightCheck();
 			window.setTimeout(() => this.setState({
 				showGameBoard: true
 			}), increment ? 400 : 10)

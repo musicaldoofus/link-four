@@ -11,8 +11,16 @@ body, html {
 div#root, div.app {
     height: inherit;
 }
-div#display {
+.board-container {
     margin: auto;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+    transition: all ease 0.4s;
+    border: 1px solid gray;
+    padding: 2em;
+    height: auto;
 }
 .app {
     position: relative;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Token from '../Token';
 import './Column.css';
 
@@ -9,12 +9,6 @@ const Slot = ({user}) => (
 );
 
 const Column = (props) => {
-	/*shouldComponentUpdate(prevProps) {
-		const condition = prevProps.slotStates.every((slot, i) => slot === this.props.slotStates[i]);
-		console.log('Column.props', !condition, prevProps.slotStates, this.props.slotStates);
-		return !condition;
-	}*/
-
 	const isColumnFull = props.slotStates.every(slot => slot !== undefined);
 	const slots = props.slotStates.map((user, i) => <Slot key={i} user={user}/>);
 	return (

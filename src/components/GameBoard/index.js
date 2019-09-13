@@ -89,10 +89,7 @@ class GameBoard extends Component {
 			invertedDiagonal,
 			horizontalLine,
 			verticalLine
-		].some(test => {
-			//console.log('test', test, test(this.state.currentUser));
-			return test(this.state.currentUser);
-		});
+		].some(test => test(this.state.currentUser));
 		return winnerTests || isTie();
 	}
 
@@ -100,10 +97,9 @@ class GameBoard extends Component {
 		this.props.incrementScore(this.state.currentUser, 1);
 		const isWinner = this.isWinner();
 		if (isWinner) {
-			this.props.handleWinner(isWinner === 'tie' ? 'tie' : this.state.currentUser);
 			this.setState({
 				columns: updatedColumnList
-			});
+			}, () => this.props.handleWinner(isWinner === 'tie' ? 'tie' : this.state.currentUser));
 		}
 		else {
 			const updatedUser = this.state.currentUser === 'user' ? 'cpu' : 'user';

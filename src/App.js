@@ -46,9 +46,7 @@ class App extends Component {
 		this.setState({
 			winner,
 			scores
-		}, () => {
-			return window.setTimeout(() => this.handleRefresh(winner === 'tie' ? -1 : 1), this.closeOutTime);
-		});
+		}, () => window.setTimeout(() => this.handleRefresh(winner === 'tie' ? -1 : 1), this.closeOutTime));
 	}
 
 	handleRefresh(increment) {
@@ -62,14 +60,19 @@ class App extends Component {
 		this.setState(toggleState, () => {
 			window.setTimeout(() => this.setState({
 				showGameBoard: true
-			}), 10)
+			}), increment ? 400 : 10)
 		});
 	}
 	
 	render() {
+		const boardContainerStyle = {
+			width: `${(this.state.factorDepth * 4) + this.state.factorDepth - 1 + 4}em`,
+			height: `${(this.state.factorDepth * 4) + this.state.factorDepth + 8}em`
+		};
+		console.log(boardContainerStyle);
 		return (
 			<div className="app">
-				<div id="display">
+				<div className="board-container" style={boardContainerStyle}>
 					<HUD
 						scores={this.state.scores}
 						handleRefresh={() => this.handleRefresh()}

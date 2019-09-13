@@ -2,7 +2,7 @@
 .column {
 	position: relative;
 	display: grid;
-	grid-gap: 16px;
+	grid-gap: 1em;
 	z-index: 1;
 }
 .column.open {
@@ -11,8 +11,8 @@
 .slot {
 	z-index: 2;
 	display: block;
-	width: 64px;
-	height: 64px;
+	width: 4em;
+	height: 4em;
 	border-radius: 100%;
 	border: 2px solid black;
 }

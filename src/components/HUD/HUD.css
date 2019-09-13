@@ -2,7 +2,8 @@
 .heads-up-display {
     display: grid;
     grid-template-columns: repeat(3, auto);
-    padding-bottom: 4em;
+    height: 4em;
+    padding-bottom: 2em;
 }
 .heads-up-display > div {
     display: flex;

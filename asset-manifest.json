@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/link-four/static/css/main.f2fda266.chunk.css",
-    "main.js": "/link-four/static/js/main.4aaf5400.chunk.js",
-    "main.js.map": "/link-four/static/js/main.4aaf5400.chunk.js.map",
+    "main.js": "/link-four/static/js/main.ca4a7503.chunk.js",
+    "main.js.map": "/link-four/static/js/main.ca4a7503.chunk.js.map",
     "runtime~main.js": "/link-four/static/js/runtime~main.cadb73ff.js",
     "runtime~main.js.map": "/link-four/static/js/runtime~main.cadb73ff.js.map",
-    "static/js/2.2ec475fb.chunk.js": "/link-four/static/js/2.2ec475fb.chunk.js",
-    "static/js/2.2ec475fb.chunk.js.map": "/link-four/static/js/2.2ec475fb.chunk.js.map",
+    "static/js/2.b3b6012e.chunk.js": "/link-four/static/js/2.b3b6012e.chunk.js",
+    "static/js/2.b3b6012e.chunk.js.map": "/link-four/static/js/2.b3b6012e.chunk.js.map",
     "index.html": "/link-four/index.html",
-    "precache-manifest.752ec38e54959a71f98d7b4a99c7b951.js": "/link-four/precache-manifest.752ec38e54959a71f98d7b4a99c7b951.js",
+    "precache-manifest.3d77e62c24d459921ad7cd76a8379d83.js": "/link-four/precache-manifest.3d77e62c24d459921ad7cd76a8379d83.js",
     "service-worker.js": "/link-four/service-worker.js",
     "static/css/main.f2fda266.chunk.css.map": "/link-four/static/css/main.f2fda266.chunk.css.map"
   }

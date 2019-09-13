@@ -84,7 +84,7 @@ class App extends Component {
 		};
 		return (
 			<div className="app">
-				<div className="board-container" style={boardContainerStyle}>
+				<main className="board-container" style={boardContainerStyle}>
 					<HUD
 						scores={this.state.scores}
 						handleRefresh={() => this.handleRefresh()}
@@ -97,7 +97,7 @@ class App extends Component {
 							handleWinner={this.handleWinner}
 						/>
 					)}
-				</div>
+				</main>
 				{this.state.winner && (
 					<Modal
 						closeOutTime={this.closeOutTime}

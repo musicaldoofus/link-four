@@ -9,10 +9,10 @@
 	animation: animation 1200ms linear both;
 }
 .token.user {
-	background-color: red;	
+	background-color: #f8e330;	
 }
 .token.cpu {
-	background-color: blue;	
+	background-color: #e1182d;	
 }
 
 /* Generated with Bounce.js. Edit at http://bouncejs.com#%7Bs%3A%5B%7BT%3A%22t%22%2Ce%3A%22B%22%2Cd%3A1200%2CD%3A0%2Cf%3A%7Bx%3A0%2Cy%3A-600%7D%2Ct%3A%7Bx%3A0%2Cy%3A0%7D%2Cs%3A5%2Cb%3A4%7D%5D%7D */

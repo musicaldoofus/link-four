@@ -94,6 +94,13 @@ class App extends Component {
 						<p>{this.state.winner === 'tie' ? ':-(' : this.state.winner}</p>
 					</Modal>
 				)}
+				<footer role="contentinfo">
+					<div>
+						<p>
+							Made with <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg"/> and hosted with &#9829; by GitHub
+						</p>
+					</div>
+				</footer>
 			</div>
 		);
 	}
